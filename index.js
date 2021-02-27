@@ -2,10 +2,16 @@ const { Telegraf } = require("telegraf");
 require("dotenv").config();
 const { getStockPrice, getDovizPrice } = require("./lib/requests");
 const commandArgs = require("./lib/commandArgs");
+const schedule = require('node-schedule');
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
 bot.use(commandArgs());
+
+schedule.scheduleJob('*/1 * * * *', async function() {
+  const data = await getStockPrice('BRYAT');
+  bot.telegram.sendMessage(`BRYAT: ${data.data.hisseYuzeysel.alis} ₺`) 
+});
 
 bot.start((ctx) => {
   ctx.reply(
