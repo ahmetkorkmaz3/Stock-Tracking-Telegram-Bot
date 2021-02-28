@@ -1,16 +1,19 @@
-const { Telegraf } = require("telegraf");
-require("dotenv").config();
-const { getStockPrice, getDovizPrice } = require("./lib/requests");
-const commandArgs = require("./lib/commandArgs");
+const { Telegraf } = require('telegraf');
+require('dotenv').config();
+const { getStockPrice, getDovizPrice } = require('./lib/requests');
+const commandArgs = require('./lib/commandArgs');
 const schedule = require('node-schedule');
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
 bot.use(commandArgs());
 
-schedule.scheduleJob('*/1 * * * *', async function() {
+schedule.scheduleJob('*/1 * * * *', async function () {
   const data = await getStockPrice('BRYAT');
-  bot.telegram.sendMessage(`BRYAT: ${data.data.hisseYuzeysel.alis} ₺`) 
+  bot.telegram.sendMessage(
+    630053545,
+    `BRYAT: ${data.data.hisseYuzeysel.alis} ₺`
+  );
 });
 
 bot.start((ctx) => {
@@ -35,7 +38,7 @@ bot.help((ctx) => {
   );
 });
 
-bot.command("hisse", async (ctx) => {
+bot.command('hisse', async (ctx) => {
   try {
     const data = await getStockPrice(ctx.state.command.arg.toUpperCase());
 
@@ -52,21 +55,21 @@ bot.command("hisse", async (ctx) => {
   }
 });
 
-bot.command("doviz", async (ctx) => {
+bot.command('doviz', async (ctx) => {
   try {
     const data = await getDovizPrice();
 
-    const gold = data.data.filter(item => {
-      return item.SEMBOLID == 2199
-    })
-
-    const euro = data.data.filter(item => {
-      return item.SEMBOLID == 1639
+    const gold = data.data.filter((item) => {
+      return item.SEMBOLID == 2199;
     });
 
-    const dolar = data.data.filter(item => {
-      return item.SEMBOLID == 1302
-    })
+    const euro = data.data.filter((item) => {
+      return item.SEMBOLID == 1639;
+    });
+
+    const dolar = data.data.filter((item) => {
+      return item.SEMBOLID == 1302;
+    });
 
     ctx.reply(
       `Altın Kuru:
@@ -80,21 +83,20 @@ bot.command("doviz", async (ctx) => {
       Alış Fiyatı: ${euro[0].ALIS} ₺
       Satış Fiyatı: ${euro[0].SATIS} ₺
       `
-    )
+    );
 
     ctx.reply(
       `Dolar Kuru:
       Alış Fiyatı: ${dolar[0].ALIS} ₺
       Satış Fiyatı: ${dolar[0].SATIS} ₺
       `
-    )
-
+    );
   } catch (err) {
     console.log(err);
   }
-})
+});
 
 bot.launch();
 
-process.once("SIGINT", () => bot.stop("SIGINT"));
-process.once("SIGTERM", () => bot.stop("SIGTERM"));
+process.once('SIGINT', () => bot.stop('SIGINT'));
+process.once('SIGTERM', () => bot.stop('SIGTERM'));
