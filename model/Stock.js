@@ -7,14 +7,14 @@ const StockSchema = new mongoose.Schema({
   },
   notification_times: [
     {
+      _id: false,
       hour: {
         type: Number,
-        min: 0,
-        max: 23,
+        required: true,
       },
       minutes: {
-        Type: Number,
-        min: 0
+        type: Number,
+        required: true,
       },
     },
   ],

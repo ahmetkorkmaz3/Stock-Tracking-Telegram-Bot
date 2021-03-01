@@ -9,6 +9,7 @@ const UserModel = require('./model/User')
 const StockModel = require('./model/Stock')
 
 const { findUserByChatId } = require('./services/userService')
+const { createStock } = require('./services/stockService')
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
 db.connect()
@@ -29,30 +30,31 @@ bot.command('test', async (ctx) => {
     notification_times: [
       {
         hour: 5,
-        minutes: 5
+        minutes: 5,
       },
       {
         hour: 4,
-        minutes: 4
-      }
-    ]
+        minutes: 4,
+      },
+    ],
   })
 
   const user = await UserModel.create({
     name: ctx.from.first_name,
     chat_id: ctx.message.chat.id,
-    stock_list: stock_list._id
+    stock_list: stock_list._id,
   })
 
   ctx.reply(user)
 })
 
 bot.start(async (ctx) => {
-
-  if (!findUserByChatId(ctx.message.chat.id)) {
+  const isUserHave = await findUserByChatId(ctx.message.chat.id)
+  if (!isUserHave) {
+    console.log('if içi')
     const user = await UserModel.create({
       name: ctx.from.first_name,
-      chat_id: ctx.message.chat.id
+      chat_id: ctx.message.chat.id,
     })
   }
 
@@ -81,10 +83,10 @@ bot.help((ctx) => {
 
 bot.command('hisse', async (ctx) => {
   try {
-    const data = await getStockPrice(ctx.state.command.arg.toUpperCase())
+    const data = await getStockPrice(ctx.state.command.arg[0].toUpperCase())
 
     ctx.reply(
-      `${ctx.state.command.arg.toUpperCase()} Hissesi:
+      `${ctx.state.command.arg[0].toUpperCase()} Hissesi:
       Alış Fiyatı: ${data.data.hisseYuzeysel.alis} ₺
       Satış Fiyatı: ${data.data.hisseYuzeysel.satis} ₺
       Tavan Fiyat: ${data.data.hisseYuzeysel.tavan} ₺
@@ -151,6 +153,26 @@ bot.command('euro', async (ctx) => {
   } catch (err) {
     console.log(err)
   }
+})
+
+bot.command('liste', async (ctx) => {
+  const args = ctx.state.command.arg
+  const notification_times = []
+
+  for (let index = 1; index < args.length; index += 2) {
+    const object = {
+      hour: args[index],
+      minutes: args[index + 1],
+    }
+    notification_times.push(object)
+  }
+
+  const stock = await createStock({
+    name: ctx.state.command.arg[0].toUpperCase(),
+    notification_times: notification_times,
+    chat_id: ctx.message.chat.id,
+  })
+  console.log(stock)
 })
 
 bot.launch()
