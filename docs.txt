@@ -1,0 +1,9 @@
+// schedule.scheduleJob('*/1 * * * *', async function () {
+//   const data = await getStockPrice('BRYAT');
+//   bot.telegram.sendMessage(
+//     630053545,
+//     `BRYAT: ${data.data.hisseYuzeysel.alis} ₺`
+//   );
+// });
+
+node-schedule ile bir chate message gönderme
