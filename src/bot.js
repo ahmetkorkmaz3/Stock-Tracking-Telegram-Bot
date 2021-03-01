@@ -153,7 +153,6 @@ const notificationList = () => {
       notification_times: notification_times,
       chat_id: ctx.message.chat.id,
     })
-    console.log(stock)
   })
 }
 
