@@ -12,7 +12,7 @@
 
 > Stock tracking
 
-### 🏠 [Telegram Username](@TurkeyStockTrackingBot)
+### 🏠 [Telegram](https://telegram.me/TurkeyStockTrackingBot)
 
 ## Install
 
