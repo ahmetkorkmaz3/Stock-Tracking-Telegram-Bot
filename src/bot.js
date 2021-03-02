@@ -32,8 +32,8 @@ const start = () => {
           Selam ${ctx.from.first_name}, bu botu kullanarak hisse senedi fiyatının anlık değerini takip edebilirsiniz.
           /help komutu ile nasıl çalıştığını öğrenebilirsiniz.
       
-          Geliştirici: Murat Ahmet KORKMAZ
-          Katkı sağlamak için: https://github.com/ahmetkorkmaz3
+          Geliştirici: Murat Ahmet KORKMAZ <muratahmetkorkmaz@hotmail.com>
+          Katkı sağlamak için: https://github.com/ahmetkorkmaz3/Stock-Tracking-Telegram-Bot
           `
     )
   })
@@ -44,10 +44,13 @@ const help = () => {
     ctx.reply(
       `
         Merhaba ${ctx.from.first_name}, aşağıdaki komutları kullanarak bilgi edinebilirsin.
-        /hisse SYMBOL_ADI => bu komutu kullanarak hisse senedinin anlık değerini öğrenebilirsin.
-        /altin komutunu kullanarak altın fiyatlarını öğrenebilirsin.
-        /dolar komutunu kullanarak dolar fiyatlarını öğrenebilirsin.
-        /euro komutunu kullanarak euro fiyatlarını öğrenebilirsin.
+        /hisse [SYMBOL_ADI]
+        /altin
+        /dolar
+        /euro
+
+        Geliştirici: Murat Ahmet KORKMAZ <muratahmetkorkmaz@hotmail.com>
+        Katkı sağlamak için: https://github.com/ahmetkorkmaz3/Stock-Tracking-Telegram-Bot
         `
     )
   })
